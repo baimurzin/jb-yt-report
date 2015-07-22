@@ -1,0 +1,37 @@
+<div class="row" ng-controller="ReportCtrl">
+    <div class="row form-group">
+        <div class="col-sm-12 col-md-4">
+            <label class="control-label" for="project">Проект</label>
+            <select class="form-control" id="project" name="project">
+                <option value="" selected>Все</option>
+                <option ng-repeat="project in projects" value="{{project.shortName}}">{{project.name}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="row form-group">
+        <label class="col-md-12 control-label" for="task-opened-interval">Дата открытия задачи</label>
+        <div id="task-opened-interval">
+            <div class="col-sm-12 col-md-3">
+                <label class="control-label" for="timeos">C:</label>
+                <input class="form-control" type="date" id="timeos"/>
+            </div>
+            <div class="col-sm-12 col-md-3">
+                <label class="control-label" for="timeoe">По:</label>
+                <input class="form-control" type="date" id="timeoe"/>
+            </div>
+        </div>
+    </div>
+    <div class="row form-group">
+        <label class="control-label col-md-12" for="task-closed-interval">Дата закрытия задачи</label>
+        <div id="task-closed-interval">
+            <div class="col-sm-12 col-md-3">
+                <label class="control-label" for="timecs">C:</label>
+                <input class="form-control" type="date" id="timecs"/>
+            </div>
+            <div class="col-sm-12 col-md-3">
+                <label class="control-label" for="timece">По:</label>
+                <input class="form-control" type="date" id="timece"/>
+            </div>
+        </div>
+    </div>
+</div>
