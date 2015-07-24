@@ -1,1 +1,4 @@
-An app to find create report
+#install
+npm install
+#start
+npm start
