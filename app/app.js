@@ -5,8 +5,7 @@ angular.module('myApp', [
     'ngRoute',
     //'ngCookies',
     'myApp.report',
-    'myApp.login',
-    'myApp.version'
+    'myApp.login'
 ])
     .config(['$routeProvider', function ($routeProvider) {
         $routeProvider.otherwise({redirectTo: '/report'});
