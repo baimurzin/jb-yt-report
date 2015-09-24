@@ -45,7 +45,7 @@
     <div id="report">
         <table class="table table-bordered table-striped"
                 ng-repeat="(assignee, issues) in issuesMap" data-name="{{assignee}}">
-            <thead>
+            <thead ng-click="showChart(assignee, issues)">
                 <tr>
                     <td></td>
                     <td ng-repeat="issue in issues">

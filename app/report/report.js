@@ -24,7 +24,14 @@ angular.module('myApp.report', ['ngRoute'])
         });
     }])
 
-    .controller('ReportCtrl', ['$scope', '$http', '$location', function ($scope, $http, $location) {
+    .controller('ReportCtrl', ['$scope', '$http', '$location', 'ChartService', function ($scope, $http, $location, ChartService) {
+        $scope.showChart = function (a ,b) {
+            var data = {};
+            data.assignee = a;
+            data.issue = b;
+            ChartService.addData(data);
+            $location.path('/chart');
+        };
         var date = new Date();
         var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
         var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
