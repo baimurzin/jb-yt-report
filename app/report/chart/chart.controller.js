@@ -5,14 +5,25 @@ angular
     .module('myApp.chart')
     .controller('ChartReportController', ChartReportController);
 
-ChartReportController.$inject = ['$scope','ChartService'];
+ChartReportController.$inject = ['$scope', 'ChartService'];
 function ChartReportController($scope, ChartService) {
     $scope.labels = []; // название таксков
     $scope.series = []; // на кого из пользователей составляется график
     $scope.data = []; // добавить сюда массив с данными для каждой задачи
+    var real = [];
+    $scope.options = {
+        // String - Template string for single tooltips
+        tooltipTemplate: function(valuesObject){
+            console.log(valuesObject);
+            // do different things here based on whatever you want;
+            return "task point: "+ valuesObject.value;
+        },
+        // String - Template string for multiple tooltips
+        multiTooltipTemplate: "<%= value + ' %' %>"
+    };
     //initialize();
     $scope.onClick = function (points, evt) {
-       //do smth
+        //do smth
     };
 
     //function initialize() {
@@ -24,21 +35,34 @@ function ChartReportController($scope, ChartService) {
     //        $scope.data = val.totalPoint;
     //    });
     //}
-init();
-     function init () {
+    init();
+    //testData();
+    function init() {
         var d = ChartService.getData();
         $scope.series.push(d.assignee);
-         var labels = [];
-         var data = [];
+        var labels = [];
+        var data = [];
         d.issue.forEach(function (val) {
-            //debugger;
+            var maxPoint = val.maxPoint;
+            var totalPoint = val.totalPoint;
+            var percent = totalPoint / maxPoint * 100;
             labels.push(val.id);
-            data.push(val.totalPoint);
+            data.push(percent);
+            real.push(totalPoint);
         });
-         $scope.labels = labels;
-         console.log($scope.labels);
-         $scope.data.push(data);
-         console.log($scope.data);
+        $scope.labels = labels;
+        $scope.data.push(data);
+    }
+
+    function testData() {
+        $scope.series.push('TEST');
+        var labels = [];
+        for (var i = 1; i < 21; i++) {
+            labels.push('TASK-' + i);
+        }
+        $scope.labels = labels;
+        var data = [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 100];
+        $scope.data.push(data);
     }
 
     //$scope.$on('incomingChartData', function () {
