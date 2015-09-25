@@ -7,17 +7,21 @@
                 <option ng-repeat="project in projects" value="{{project.shortName}}">{{project.name}}</option>
             </select>
         </div>
+        <div class="col-sm-12 col-md-4">
+            <label class="control-label" for="project">Показать задачи без оценок</label>
+            <input class="form-control" type="checkbox" ng-model="allow_null_points" value="{{allow_null_points}}"/>
+        </div>
     </div>
     <div class="row form-group">
         <label class="col-md-12 control-label" for="task-opened-interval">Дата открытия задачи</label>
         <div id="task-opened-interval">
             <div class="col-sm-12 col-md-3">
                 <label class="control-label" for="timeos">C:</label>
-                <input class="form-control" type="date" id="timeos" value="{{time.created_begin | date:'yyyy-MM-dd'}}"/>
+                <input class="form-control" type="date" id="timeos" ng-model="time.created_begin" value="{{time.created_begin | date:'yyyy-MM-dd'}}"/>
             </div>
             <div class="col-sm-12 col-md-3">
                 <label class="control-label" for="timeoe">По:</label>
-                <input class="form-control" type="date" id="timeoe" value="{{time.created_end | date:'yyyy-MM-dd'}}"/>
+                <input class="form-control" type="date" id="timeoe" ng-model="time.created_end" value="{{time.created_end | date:'yyyy-MM-dd'}}"/>
             </div>
         </div>
     </div>
@@ -26,11 +30,11 @@
         <div id="task-closed-interval">
             <div class="col-sm-12 col-md-3">
                 <label class="control-label" for="timecs">C:</label>
-                <input class="form-control" type="date" id="timecs" value="{{time.closed_begin | date:'yyyy-MM-dd'}}"/>
+                <input class="form-control" type="date" id="timecs" ng-model="time.closed_begin" value="{{time.closed_begin | date:'yyyy-MM-dd'}}"/>
             </div>
             <div class="col-sm-12 col-md-3">
                 <label class="control-label" for="timece">По:</label>
-                <input class="form-control" type="date" id="timece" value="{{time.closed_end | date:'yyyy-MM-dd'}}"/>
+                <input class="form-control" type="date" id="timece" ng-model="time.closed_end" value="{{time.closed_end | date:'yyyy-MM-dd'}}"/>
             </div>
             <div class="col-sm-12 col-md-3">
                 <label class="control-label hidden-xs" for="create_report">&nbsp;</label>
@@ -65,14 +69,14 @@
                         {{issue.maxPoint}}
                     </td>
                     <td>{{issues | sumPoints:'maxPoint'}}</td>
-                    <td>100%</td>
+                    <td>{{(issues | sumPoints:'maxPoint') == 0 ? 0 : 100}}%</td>
                 </tr>
                 <tr>
                     <td ng-repeat="issue in issues">
                         {{issue.totalPoint}}
                     </td>
                     <td>{{issues | sumPoints:'totalPoint'}}</td>
-                    <td>{{(issues | sumPoints:'totalPoint') * 100 / (issues | sumPoints:'maxPoint')}}%</td>
+                    <td>{{(issues | sumPoints:'maxPoint') == 0 ? 0 : ((issues | sumPoints:'totalPoint') * 100 / (issues | sumPoints:'maxPoint'))}}%</td>
                 </tr>
             </tbody>
         </table>
