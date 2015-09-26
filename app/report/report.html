@@ -49,9 +49,9 @@
     <div id="report">
         <table class="table table-bordered table-striped"
                 ng-repeat="(assignee, issues) in issuesMap" data-name="{{assignee}}">
-            <thead>
+            <thead >
                 <tr>
-                    <td></td>
+                    <td ng-click="showChart(assignee, issues)"> <center><img width="50" height="50" src="http://s1.iconbird.com/ico/2014/1/613/w512h5121390849392combo512.png"/> </center> </td>
                     <td ng-repeat="issue in issues">
                         {{issue.id}}<br/>
                         {{issue.summary}}
