@@ -3,6 +3,11 @@
 function formatDate(date) {
     return date.getFullYear() + '-' + (date.getMonth() + 1  < 10 ? '0' : '') + (date.getMonth() + 1) + '-' + (date.getDate() < 10 ? '0' : '') +date.getDate();
 }
+function formatDateRange(time_begin, time_end) {
+    if (time_begin && time_end)
+        return formatDate(time_begin) + ' .. ' + formatDate(time_end);
+    return formatDate(time_begin || time_end);
+}
 angular.module('myApp.report', ['ngRoute'])
 
     .filter('sumPoints', function () {
@@ -12,7 +17,7 @@ angular.module('myApp.report', ['ngRoute'])
             }
             var sum = 0;
             for (var i = 0; i < data.length; i++) {
-                sum = sum + parseInt(data[i][key]);
+                sum = sum + (data[i][key] == 'Без оценки' ? 0 : parseInt(data[i][key]));
             }
             return sum;
         }
@@ -58,13 +63,15 @@ angular.module('myApp.report', ['ngRoute'])
             getIssues(0);
             function getIssues(after) {
                 var filter = "&filter=";
-                filter += 'created: ' + formatDate(time.created_begin) + ' .. ' + formatDate(time.created_end);
-                filter += ' resolved date: ' + formatDate(time.closed_begin) + ' .. ' + formatDate(time.closed_end);
+                if (time.created_begin || time.created_end)
+                    filter += 'created: ' + formatDateRange(time.created_begin, time.created_end);
+                if (time.closed_begin || time.closed_end)
+                    filter += ' resolved date: ' + formatDateRange(time.closed_begin, time.closed_end);
                 (project ? (filter += ' project: ' + project) : {});
                 $http.get('http://jetbrainslab.it.kpfu.ru:8112/rest/issue' + '?with=id&with=summary&with=Assignee&with=Max Point&with=Total point&max=500&after=' + after + filter)
                     .success(function (response) {
                         response.issue.forEach(function (value) {
-                            var maxPoint = -1, totalPoint = 0;
+                            var maxPoint = -1, totalPoint = -1;
                             var assignee = '', summary = '';
                             value.field.forEach(function (field) {
                                 if (field.name == "Max point") {
@@ -81,13 +88,13 @@ angular.module('myApp.report', ['ngRoute'])
                                     summary = field.value;
                                 }
                             });
-                            if (maxPoint != -1 && assignee != '') {
+                            if ((maxPoint != -1 || $scope.allow_null_points) && assignee != '') {
                                 if (!$scope.issuesMap[assignee])
                                     $scope.issuesMap[assignee] = [];
                                 $scope.issuesMap[assignee].push({
                                     id: value.id,
-                                    maxPoint: maxPoint,
-                                    totalPoint: totalPoint,
+                                    maxPoint: maxPoint == -1 ? 'Без оценки' : maxPoint,
+                                    totalPoint: totalPoint == -1 ? 'Без оценки' : totalPoint,
                                     summary: summary
                                 });
                             }
