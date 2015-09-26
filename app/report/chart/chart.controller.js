@@ -10,13 +10,13 @@ function ChartReportController($scope, ChartService) {
     $scope.labels = []; // название таксков
     $scope.series = []; // на кого из пользователей составляется график
     $scope.data = []; // добавить сюда массив с данными для каждой задачи
-    var real = [];
+    var mapTooltips = new Map();
     $scope.options = {
         // String - Template string for single tooltips
         tooltipTemplate: function(valuesObject){
-            console.log(valuesObject);
+            var tooltip = mapTooltips.get(valuesObject.label);
             // do different things here based on whatever you want;
-            return "task point: "+ valuesObject.value;
+            return "task point: "+ tooltip.totalPoint + "\n" + "max point: " + tooltip.maxPoint + "\n" + "summary: " + tooltip.summary;
         },
         // String - Template string for multiple tooltips
         multiTooltipTemplate: "<%= value + ' %' %>"
@@ -48,7 +48,7 @@ function ChartReportController($scope, ChartService) {
             var percent = totalPoint / maxPoint * 100;
             labels.push(val.id);
             data.push(percent);
-            real.push(totalPoint);
+            mapTooltips.set(val.id, {maxPoint:maxPoint, totalPoint:totalPoint, summary:val.summary})
         });
         $scope.labels = labels;
         $scope.data.push(data);
