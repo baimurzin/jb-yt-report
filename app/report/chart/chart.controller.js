@@ -11,7 +11,15 @@ function ChartReportController($scope, ChartService) {
     $scope.series = [];
     $scope.data = [];
     var mapTooltips = new Map();
+    var step  = 5;
+    var max   = 100;
+    var start = 0;
     $scope.options = {
+        scaleOverride: true,
+        scaleSteps: Math.ceil((max-start)/step),
+        scaleStepWidth: step,
+        scaleStartValue: start,
+        scaleBeginAtZero: true,
         tooltipTemplate: function(valuesObject){
             var tooltip = mapTooltips.get(valuesObject.label);
             return "task point: "+ tooltip.totalPoint + "\n" + "max point: " + tooltip.maxPoint + "\n" + "summary: " + tooltip.summary;
