@@ -11,7 +11,15 @@ function ChartReportController($scope, ChartService) {
     $scope.series = [];
     $scope.data = [];
     var mapTooltips = new Map();
+    var step  = 5;
+    var max   = 100;
+    var start = 0;
     $scope.options = {
+        scaleOverride: true,
+        scaleSteps: Math.ceil((max-start)/step),
+        scaleStepWidth: step,
+        scaleStartValue: start,
+        scaleBeginAtZero: true,
         tooltipTemplate: function(valuesObject){
             var tooltip = mapTooltips.get(valuesObject.label);
             return "task point: "+ tooltip.totalPoint + "\n" + "max point: " + tooltip.maxPoint + "\n" + "summary: " + tooltip.summary;
@@ -29,7 +37,7 @@ function ChartReportController($scope, ChartService) {
         var data = [];
         d.issue.forEach(function (val) {
             var maxPoint = val.maxPoint;
-            var totalPoint = val.totalPoint;
+            var totalPoint = !isNaN(Number(val.totalPoint)) ? val.totalPoint : 0;
             var percent = totalPoint / maxPoint * 100;
             labels.push(val.id);
             data.push(percent);
