@@ -37,7 +37,7 @@ function ChartReportController($scope, ChartService) {
         var data = [];
         d.issue.forEach(function (val) {
             var maxPoint = val.maxPoint;
-            var totalPoint = val.totalPoint;
+            var totalPoint = !isNaN(Number(val.totalPoint)) ? val.totalPoint : 0;
             var percent = totalPoint / maxPoint * 100;
             labels.push(val.id);
             data.push(percent);
