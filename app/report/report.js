@@ -51,6 +51,9 @@ angular.module('myApp.report', ['ngRoute'])
                 $scope.projects = response;
             })
             .error(function (data, status, headers) {
+                /**
+                 * можно заменить на общий интерсептор
+                 */
                 if (status == 401) {
                     $location.path('login');
                 }

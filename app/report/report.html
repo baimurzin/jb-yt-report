@@ -11,73 +11,92 @@
             <label class="control-label" for="project">Показать задачи без оценок</label>
             <input class="form-control" type="checkbox" ng-model="allow_null_points" value="{{allow_null_points}}"/>
         </div>
+        <div class="col-sm-12 col-md-4">
+            <label for="project">Рейтинг</label>
+            <button class="btn btn-block btn-default">Посмотреть общий рейтинг</button>
+        </div>
     </div>
     <div class="row form-group">
         <label class="col-md-12 control-label" for="task-opened-interval">Дата открытия задачи</label>
+
         <div id="task-opened-interval">
             <div class="col-sm-12 col-md-3">
                 <label class="control-label" for="timeos">C:</label>
-                <input class="form-control" type="date" id="timeos" ng-model="time.created_begin" value="{{time.created_begin | date:'yyyy-MM-dd'}}"/>
+                <input class="form-control" type="date" id="timeos" ng-model="time.created_begin"
+                       value="{{time.created_begin | date:'yyyy-MM-dd'}}"/>
             </div>
             <div class="col-sm-12 col-md-3">
                 <label class="control-label" for="timeoe">По:</label>
-                <input class="form-control" type="date" id="timeoe" ng-model="time.created_end" value="{{time.created_end | date:'yyyy-MM-dd'}}"/>
+                <input class="form-control" type="date" id="timeoe" ng-model="time.created_end"
+                       value="{{time.created_end | date:'yyyy-MM-dd'}}"/>
             </div>
         </div>
     </div>
     <div class="row form-group">
         <label class="control-label col-xs-12 col-md-12" for="task-closed-interval">Дата закрытия задачи</label>
+
         <div id="task-closed-interval">
             <div class="col-sm-12 col-md-3">
                 <label class="control-label" for="timecs">C:</label>
-                <input class="form-control" type="date" id="timecs" ng-model="time.closed_begin" value="{{time.closed_begin | date:'yyyy-MM-dd'}}"/>
+                <input class="form-control" type="date" id="timecs" ng-model="time.closed_begin"
+                       value="{{time.closed_begin | date:'yyyy-MM-dd'}}"/>
             </div>
             <div class="col-sm-12 col-md-3">
                 <label class="control-label" for="timece">По:</label>
-                <input class="form-control" type="date" id="timece" ng-model="time.closed_end" value="{{time.closed_end | date:'yyyy-MM-dd'}}"/>
+                <input class="form-control" type="date" id="timece" ng-model="time.closed_end"
+                       value="{{time.closed_end | date:'yyyy-MM-dd'}}"/>
             </div>
             <div class="col-sm-12 col-md-3">
                 <label class="control-label hidden-xs" for="create_report">&nbsp;</label>
-                <button id="create_report" class="btn btn-block btn-primary" ng-click="createReport(project, time)">Получить отчет</button>
+                <button id="create_report" class="btn btn-block btn-primary" ng-click="createReport(project, time)">
+                    Получить отчет
+                </button>
             </div>
             <div class="col-sm-12 col-md-3">
                 <label class="control-label hidden-xs" for="save_report">&nbsp;</label>
-                <button id="save_report" class="btn btn-block btn-success" ng-click="saveReport(project, time)">Сохранить отчет</button>
+                <button id="save_report" class="btn btn-block btn-success" ng-click="saveReport(project, time)">
+                    Сохранить отчет
+                </button>
             </div>
         </div>
     </div>
     <div id="report">
         <table class="table table-bordered table-striped"
-                ng-repeat="(assignee, issues) in issuesMap" data-name="{{assignee}}">
-            <thead >
-                <tr>
-                    <td ng-click="showChart(assignee, issues)"> <center><img width="50" height="50" src="http://s1.iconbird.com/ico/2014/1/613/w512h5121390849392combo512.png"/> </center> </td>
-                    <td ng-repeat="issue in issues">
-                        {{issue.id}}<br/>
-                        {{issue.summary}}
-                    </td>
-                    <td>Итог</td>
-                    <td>Итог(%)</td>
-                </tr>
+               ng-repeat="(assignee, issues) in issuesMap" data-name="{{assignee}}">
+            <thead>
+            <tr>
+                <td ng-click="showChart(assignee, issues)">
+                    <center><img width="50" height="50"
+                                 src="http://s1.iconbird.com/ico/2014/1/613/w512h5121390849392combo512.png"/></center>
+                </td>
+                <td ng-repeat="issue in issues">
+                    {{issue.id}}<br/>
+                    {{issue.summary}}
+                </td>
+                <td>Итог</td>
+                <td>Итог(%)</td>
+            </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td rowspan="2">
-                        {{assignee}}
-                    </td>
-                    <td ng-repeat="issue in issues">
-                        {{issue.maxPoint}}
-                    </td>
-                    <td>{{issues | sumPoints:'maxPoint'}}</td>
-                    <td>{{(issues | sumPoints:'maxPoint') == 0 ? 0 : 100}}%</td>
-                </tr>
-                <tr>
-                    <td ng-repeat="issue in issues">
-                        {{issue.totalPoint}}
-                    </td>
-                    <td>{{issues | sumPoints:'totalPoint'}}</td>
-                    <td>{{(issues | sumPoints:'maxPoint') == 0 ? 0 : ((issues | sumPoints:'totalPoint') * 100 / (issues | sumPoints:'maxPoint'))}}%</td>
-                </tr>
+            <tr>
+                <td rowspan="2">
+                    {{assignee}}
+                </td>
+                <td ng-repeat="issue in issues">
+                    {{issue.maxPoint}}
+                </td>
+                <td>{{issues | sumPoints:'maxPoint'}}</td>
+                <td>{{(issues | sumPoints:'maxPoint') == 0 ? 0 : 100}}%</td>
+            </tr>
+            <tr>
+                <td ng-repeat="issue in issues">
+                    {{issue.totalPoint}}
+                </td>
+                <td>{{issues | sumPoints:'totalPoint'}}</td>
+                <td>{{(issues | sumPoints:'maxPoint') == 0 ? 0 : ((issues | sumPoints:'totalPoint') * 100 / (issues |
+                    sumPoints:'maxPoint'))}}%
+                </td>
+            </tr>
             </tbody>
         </table>
     </div>
