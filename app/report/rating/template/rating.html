@@ -1,1 +1,12 @@
-{{rating.count}}
+<ul>
+    <li ng-repeat="key in rating.aMap">
+        <span>{{key}} {{value}}</span>
+    </li>
+</ul>
+
+
+<ul>
+    <li ng-repeat="(key, value) in rating.arr | orderBy: '-value.pc' ">
+        <span>Key: {{key}}, ratiing: {{value.all.pc}} week: {{value.week.pc}}</span>
+    </li>
+</ul>

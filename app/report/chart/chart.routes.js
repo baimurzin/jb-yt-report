@@ -14,3 +14,4 @@ function ChartRoutes($routeProvider) {
             controller: 'ChartReportController as chart'
         })
 }
+

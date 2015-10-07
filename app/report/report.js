@@ -37,6 +37,9 @@ angular.module('myApp.report', ['ngRoute'])
             ChartService.addData(data);
             $location.path('/chart');
         };
+        $scope.showRating = function () {
+            $location.path('/rating');
+        };
         var date = new Date();
         var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
         var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
@@ -52,7 +55,7 @@ angular.module('myApp.report', ['ngRoute'])
             })
             .error(function (data, status, headers) {
                 /**
-                 * можно заменить на общий интерсептор
+                 * пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                  */
                 if (status == 401) {
                     $location.path('login');
@@ -86,6 +89,7 @@ angular.module('myApp.report', ['ngRoute'])
                                         }
                                     });
                                 } else if (field.name == "Total point") {
+                                    console.log(true)
                                     totalPoint = field.value[0];
                                 } else if (field.name == "summary") {
                                     summary = field.value;

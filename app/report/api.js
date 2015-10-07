@@ -15,10 +15,10 @@ function ApiService($http, $q) {
      * @param after ... not mine
      * @returns {list} Return the List of Issues
      */
-    function getIssues(after) {
+    function getIssues(query) {
         var defer = $q.defer();
-        //взял как вынос функция из report.js в отдельный муодль АПИ
-        $http.get(baseUrl +'issue/' + '?with=id&with=summary&with=Assignee&with=Max Point&with=Total point&max=500&after='+after)
+        //пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ report.js пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
+        $http.get(baseUrl +'issue/' + query)
             .success(function (data) {
                 defer.resolve(data);
             })
@@ -43,7 +43,7 @@ function ApiService($http, $q) {
                 defer.reject(error);
             });
         return defer.promise;
-    }//можно юзать вместо after =500 в getIssues()
+    }//пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ after =500 пїЅ getIssues()
 
     /**
      *
