@@ -89,7 +89,6 @@ angular.module('myApp.report', ['ngRoute'])
                                         }
                                     });
                                 } else if (field.name == "Total point") {
-                                    console.log(true)
                                     totalPoint = field.value[0];
                                 } else if (field.name == "summary") {
                                     summary = field.value;

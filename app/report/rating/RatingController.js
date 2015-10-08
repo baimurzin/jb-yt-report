@@ -12,18 +12,19 @@ function RatingController($scope, Api) {
     vm.count = null;
     var date = new Date();
     date.setDate(date.getDate() - 7);
-    var arr = {};
-    var weekAgo = {};
+    var arr = {
+        week : [],
+        all : []
+    };
     Api.getIssuesCount().then(function (data) {
         vm.count = data.value;
         var offset = 0;
         while (offset < data.value) {
             getAllIssue(offset);
-
             getIssueLastWeek(offset);
             offset += 500;
         }
-        //calculatePerCentage();
+        arrangeData();
         vm.arr = arr;
     });
 
@@ -55,7 +56,9 @@ function RatingController($scope, Api) {
     }
 
     function getIssueLastWeek(offset) {
-        var filter = '&filter=resolved date: ' + date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate();
+        //var filter = '&filter=resolved date: ' + date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate();
+        var endDate = date.getFullYear() + '-' + ("0" + (date.getMonth() + 1)).slice(-2) + '-' + ("0" + date.getDate()).slice(-2);
+        var filter = '&filter=resolved date: 2014-06-02 .. ' + endDate;
         Api.getIssues('?with=id&with=summary&with=Assignee&with=Max Point&with=Total point&max=500&after=' + offset + filter).then(function (data) {
             data.issue.forEach(function (issue) {
                 var total, max, assignee;
@@ -74,33 +77,42 @@ function RatingController($scope, Api) {
                     }
                 });
                 if (assignee) {
+                    //debugger;
                     updateArr(assignee, null, {max: max, total: total});
                 }
             });
+            debugger;
             calculatePerCentageWeek();
-            console.log(data);
+        });
+    }
+
+    function arrangeData() {
+        $scope.$watch(function () {
+            return vm.arr;
+        }, function (newVal) {
+            console.log(newVal);
         });
     }
 
 
     function calculatePerCentage() {
-        for (var prop in arr) {
-            var pc = arr[prop].all.total / arr[prop].all.max;
-            arr[prop].all.pc = pc;
+        for (var prop in arr.all) {
+            var pc = arr.all[prop].total / arr.all[prop].max;
+            arr.all[prop].pc = pc.toFixed(2) * 100;
         }
     }
 
     function calculatePerCentageWeek() {
-        for (var prop in arr) {
-            var pc2 = arr[prop].week.total / arr[prop].week.max;
-            arr[prop].week.pc = pc2;
+        for (var prop in arr.week) {
+            var pc2 = arr.week[prop].total / arr.week[prop].max;
+            arr.week[prop].pc = pc2.toFixed(2)*100;
         }
     }
 
     function updateArr(assignee, value, week) {
         if (value != null) {
-            if (arr.hasOwnProperty(assignee)) {
-                var obj = arr[assignee].all;
+            if (arr.all.hasOwnProperty(assignee)) {
+                var obj = arr.all[assignee];
                 if (!isNaN(Number(value.total))) {
                     obj.total = +obj.total + +value.total;
                 } else {
@@ -112,18 +124,23 @@ function RatingController($scope, Api) {
                 } else {
                     obj.max = +obj.max + +0;
                 }
-                arr[assignee].all = obj;
+                arr.all[assignee] = obj;
             } else {
-                arr[assignee] = {all: {max: 0, total: 0}};
+                arr.all[assignee] = {max:0, total:0};
             }
         }
         if (week != null) {
-            if (arr.hasOwnProperty(assignee)) {
-                var obj = arr[assignee].week;
+            if (arr.week.hasOwnProperty(assignee)) {
+                var obj = arr.week[assignee];
                 if (!isNaN(Number(week.total))) {
                     obj.total = +obj.total + +week.total;
                 } else {
-                    obj.total = +obj.total + +0;
+                    try {
+                        obj.total = +obj.total + +0;
+                    } catch (e) {
+                        debugger;
+                        console.log(assignee);
+                    }
                 }
 
                 if (!isNaN(Number(week.max))) {
@@ -131,15 +148,16 @@ function RatingController($scope, Api) {
                 } else {
                     obj.max = +obj.max + +0;
                 }
-                arr[assignee].week = obj;
-                console.log(arr);
+                arr.week[assignee] = obj;
+            } else {
+                arr.week[assignee] = {max: 0, total:0}
             }
         }
     }
 }
 
 
-function Assignee(name) {
+function Assignees(name) {
     this.name = name;
     this.maxPoint = 0; //максимально возможный
     this.totalPoint = 0;　// сколько получил

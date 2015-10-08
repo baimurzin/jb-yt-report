@@ -29,7 +29,6 @@ function ApiService($http, $q) {
     }
 
     /**
-     *
      * @returns {number} Return a Number of Issues
      */
     function getIssuesCount() {
