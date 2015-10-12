@@ -11,6 +11,7 @@ function RatingController($scope, Api, AssigneeService) {
     var vm = this;
     vm.count = null;
     var date = new Date();
+    $scope.isNan = isNaN;
     date.setDate(date.getDate() - 7);
     Api.getIssuesCount().then(function (data) {
         vm.count = data.value;
@@ -20,8 +21,13 @@ function RatingController($scope, Api, AssigneeService) {
             getIssueLastWeek(offset);
             offset += 500;
         }
-        vm.arr = AssigneeService.getData();
     });
+
+    var updateData = function (e,d) {
+        vm.arr = d;
+    };
+
+    $scope.$on('updateDataRating', updateData);
 
 
     function getAllIssue(offset) {
@@ -46,8 +52,8 @@ function RatingController($scope, Api, AssigneeService) {
                 if (assignee) {
                     AssigneeService.add({
                         type:type,
-                        max:max,
-                        total:total,
+                        max:typeof max === 'undefined' ? 0 : max,
+                        total:typeof total === 'undefined' ? 0 : total,
                         assignee: assignee
                     });
 
@@ -83,8 +89,8 @@ function RatingController($scope, Api, AssigneeService) {
 
                     AssigneeService.add({
                         type:type,
-                        max:max,
-                        total:total,
+                        max:typeof max === 'undefined' ? 0 : max,
+                        total:typeof total === 'undefined' ? 0 : total,
                         assignee: assignee
                     });
 

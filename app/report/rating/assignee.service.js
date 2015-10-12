@@ -4,15 +4,17 @@
 angular
     .module('myApp.rating')
     .service('AssigneeService', AssigneeService);
-AssigneeService.$inject = [];
+AssigneeService.$inject = ['$rootScope'];
 
-function AssigneeService() {
+function AssigneeService($rootScope) {
     /**
      * wpc - last week data
      * apc - all
      * @type {*[]}
      */
     var assignees = {};
+
+
 
     function updateData(assigneeObj) {
         var obj = {};
@@ -37,7 +39,6 @@ function AssigneeService() {
             obj.wpc = oldData.wpc;
             pushData(obj);
         }
-        console.log(assignees);
     }
 
     function pushData(obj) {
@@ -77,9 +78,16 @@ function AssigneeService() {
             } else {
                 createNew(assigneeName);
             }
+            $rootScope.$broadcast('updateDataRating', assignees);
         },
         getData: function () {
-            return assignees;
+            var res = [];
+            for (var p in assignees) {
+                var obj = assignees[p];
+                obj.name = p;
+                res.push(obj);
+            }
+            return res;
         }
     }
 }
