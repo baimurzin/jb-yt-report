@@ -10,9 +10,9 @@
         <th>Last Week</th>
         <th>All</th>
     </tr>
-    <tr ng-repeat="(key, value) in rating.arr.all | orderBy: '-value.pc' ">
+    <tr ng-repeat="(key, value) in rating.arr ">
         <td>{{key}}</td>
-        <td>{{value.week.pc}}</td>
-        <td>{{value.all.pc}}</td>
+        <td>{{value.wpc}}</td>
+        <td>{{value.apc}}</td>
     </tr>
 </table>

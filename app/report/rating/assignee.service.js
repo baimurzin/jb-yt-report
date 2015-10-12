@@ -1,7 +1,7 @@
 /**
  * Created by vbaimurzin on 08.10.2015.
  */
-amgular
+angular
     .module('myApp.rating')
     .service('AssigneeService', AssigneeService);
 AssigneeService.$inject = [];
@@ -12,7 +12,7 @@ function AssigneeService() {
      * apc - all
      * @type {*[]}
      */
-    var assignees = [];
+    var assignees = {};
 
     function updateData(assigneeObj) {
         var obj = {};
@@ -37,24 +37,18 @@ function AssigneeService() {
             obj.wpc = oldData.wpc;
             pushData(obj);
         }
+        console.log(assignees);
     }
 
     function pushData(obj) {
-        assignees.forEach(function (elem) {
-            if (elem.assignee == obj.assignee) {
-                elem.apc = obj.apc;
-                elem.wpc = obj.wpc;
-            }
-        })
+        assignees[obj.assignee].apc = obj.apc;
+        assignees[obj.assignee].wpc = obj.wpc;
     }
 
     function retrieveAssigneeData(name) {
-        for (var a in assignees) {
-            if (a.assignee == name) {
-                return a;
-            }
+        if (assignees.hasOwnProperty(name)) {
+            return assignees[name];
         }
-
     }
 
     /**
@@ -62,11 +56,12 @@ function AssigneeService() {
      * @param name
      */
     function createNew(name) {
-        var obj = {};
-        obj.assignee = name;
-        obj.wpc = 0;
-        obj.apc = 0;
-        assignees.push(obj);
+        assignees[name] = {wpc:0, apc:0};
+    }
+
+    function isConsist(key) {
+        return !!assignees.hasOwnProperty(key);
+
     }
 
     return {
@@ -76,20 +71,15 @@ function AssigneeService() {
          */
         add: function (newAssignee) {
             var assigneeName = newAssignee.assignee;
-            if (this.isConsist(assigneeName)) {
+            if (isConsist(assigneeName)) {
                 //уже есть, значит обновим данные
                 updateData(newAssignee);
             } else {
                 createNew(assigneeName);
             }
         },
-        isConsist: function (key) {
-            for (var k in assignees) {
-                if (k.assignee == key) {
-                    return true;
-                }
-            }
-            return false;
+        getData: function () {
+            return assignees;
         }
     }
 }
